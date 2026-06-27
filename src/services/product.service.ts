@@ -7,6 +7,7 @@ export const productService = {
         search?: string;
         categoryId?: number;
         premium?: boolean;
+        colorId?: number;
     }) {
         const response = await api.get(
             '/products',

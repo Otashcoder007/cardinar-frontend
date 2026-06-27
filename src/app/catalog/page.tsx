@@ -7,12 +7,18 @@ import FilterDrawer from "@/components/catalog/FilterDrawer";
 export default function CatalogPage() {
     const [page, setPage] = useState(1);
     const [categoryId, setCategoryId] = useState<number>();
+    const [search, setSearch] = useState('');
+    const [premium, setPremium] = useState(false);
+    const [colorId, setColorId] = useState<number>();
     const {
         data,
         isLoading,
     } = useProducts(
         page,
         categoryId,
+        search,
+        premium,
+        colorId,
     );
 
     return (
@@ -21,6 +27,15 @@ export default function CatalogPage() {
             <FilterDrawer
                 categoryId={categoryId}
                 setCategoryId={setCategoryId}
+
+                search={search}
+                setSearch={setSearch}
+
+                premium={premium}
+                setPremium={setPremium}
+
+                colorId={colorId}
+                setColorId={setColorId}
             />
 
             <h1 className="mb-8 text-4xl font-bold">

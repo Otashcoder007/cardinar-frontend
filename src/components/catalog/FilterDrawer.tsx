@@ -2,17 +2,29 @@
 import {useState} from 'react';
 import {useCategories} from "@/hooks/use-categories";
 import {Category} from "@/types/category.types";
+import {useColors} from '@/hooks/use-colors';
+import {Color} from '@/types/color.types';
 
 interface Props {
     categoryId?: number;
-    setCategoryId: (
-        value: number | undefined,
-    ) => void;
+    setCategoryId: (value: number | undefined) => void;
+    search: string;
+    setSearch: (value: string) => void;
+    premium: boolean;
+    setPremium: (value: boolean) => void;
+    colorId?: number;
+    setColorId: (value: number | undefined) => void;
 }
 
-const FilterDrawer = ({categoryId, setCategoryId}: Props) => {
+const FilterDrawer = ({
+                          categoryId, setCategoryId,
+                          search, setSearch,
+                          premium, setPremium,
+                          colorId, setColorId,
+                      }: Props) => {
     const [isOpen, setIsOpen] = useState(false);
     const {data} = useCategories();
+    const {data: colorData} = useColors();
 
     return (
         <>
@@ -86,13 +98,51 @@ const FilterDrawer = ({categoryId, setCategoryId}: Props) => {
 
                             <input
                                 type="text"
+                                value={search}
+                                onChange={(e) =>
+                                    setSearch(e.target.value)
+                                }
                                 className="w-full rounded border p-2"
                             />
                         </div>
+                        <div>
+                            <label className="mb-3 block text-sm font-medium">
+                                Colors
+                            </label>
 
+                            <div className="flex flex-wrap gap-3">
+                                {colorData?.colors?.map(
+                                    (color: Color) => (
+                                        <button
+                                            key={color.id}
+                                            type="button"
+                                            className={`h-8 w-8 rounded-full border-2 transition duration-200 hover:scale-110
+                                            ${
+                                                colorId === color.id
+                                                    ? 'border-black scale-110'
+                                                    : 'border-gray-300'
+                                            }`}
+                                            style={{
+                                                backgroundColor: color.color
+                                            }}
+                                            onClick={() =>
+                                                setColorId(color.id)
+                                            }
+                                            title={color.title}
+                                        />
+                                    ),
+                                )}
+                            </div>
+                        </div>
                         <div>
                             <label className="flex items-center gap-2">
-                                <input type="checkbox"/>
+                                <input
+                                    type="checkbox"
+                                    checked={premium}
+                                    onChange={(e) =>
+                                        setPremium(e.target.checked)
+                                    }
+                                />
                                 Premium only
                             </label>
                         </div>
